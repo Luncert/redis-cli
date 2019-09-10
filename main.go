@@ -2,6 +2,10 @@ package main
 
 import "fmt"
 
+const (
+	RedisVersion = "2.9.11"
+)
+
 type config struct {
 	hostIP      string
 	hostPort    int
