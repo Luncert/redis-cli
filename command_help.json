@@ -1,0 +1,1122 @@
+[
+  {
+    "name": "APPEND",
+    "params": "key value",
+    "summary": "Append a value to a key",
+    "group": 1,
+    "since": "2.0.0"
+  },
+  {
+    "name": "AUTH",
+    "params": "password",
+    "summary": "Authenticate to the server",
+    "group": 8,
+    "since": "1.0.0"
+  },
+  {
+    "name": "BGREWRITEAOF",
+    "params": "-",
+    "summary": "Asynchronously rewrite the append-only file",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "BGSAVE",
+    "params": "-",
+    "summary": "Asynchronously save the dataset to disk",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "BITCOUNT",
+    "params": "key [start] [end]",
+    "summary": "Count set bits in a string",
+    "group": 1,
+    "since": "2.6.0"
+  },
+  {
+    "name": "BITOP",
+    "params": "operation destkey key [key ...]",
+    "summary": "Perform bitwise operations between strings",
+    "group": 1,
+    "since": "2.6.0"
+  },
+  {
+    "name": "BITPOS",
+    "params": "key bit [start] [end]",
+    "summary": "Find first bit set or clear in a string",
+    "group": 1,
+    "since": "2.8.7"
+  },
+  {
+    "name": "BLPOP",
+    "params": "key [key ...] timeout",
+    "summary": "Remove and get the first element in a list,or block until one is available",
+    "group": 2,
+    "since": "2.0.0"
+  },
+  {
+    "name": "BRPOP",
+    "params": "key [key ...] timeout",
+    "summary": "Remove and get the last element in a list,or block until one is available",
+    "group": 2,
+    "since": "2.0.0"
+  },
+  {
+    "name": "BRPOPLPUSH",
+    "params": "source destination timeout",
+    "summary": "Pop a value from a list,push it to another list and return it; or block until one is available",
+    "group": 2,
+    "since": "2.2.0"
+  },
+  {
+    "name": "CLIENT GETNAME",
+    "params": "-",
+    "summary": "Get the current connection name",
+    "group": 9,
+    "since": "2.6.9"
+  },
+  {
+    "name": "CLIENT KILL",
+    "params": "ip:port",
+    "summary": "Kill the connection of a client",
+    "group": 9,
+    "since": "2.4.0"
+  },
+  {
+    "name": "CLIENT LIST",
+    "params": "-",
+    "summary": "Get the list of client connections",
+    "group": 9,
+    "since": "2.4.0"
+  },
+  {
+    "name": "CLIENT PAUSE",
+    "params": "timeout",
+    "summary": "Stop processing commands from clients for some time",
+    "group": 9,
+    "since": "2.9.50"
+  },
+  {
+    "name": "CLIENT SETNAME",
+    "params": "connection-name",
+    "summary": "Set the current connection name",
+    "group": 9,
+    "since": "2.6.9"
+  },
+  {
+    "name": "CONFIG GET",
+    "params": "parameter",
+    "summary": "Get the value of a configuration parameter",
+    "group": 9,
+    "since": "2.0.0"
+  },
+  {
+    "name": "CONFIG RESETSTAT",
+    "params": "-",
+    "summary": "Reset the stats returned by INFO",
+    "group": 9,
+    "since": "2.0.0"
+  },
+  {
+    "name": "CONFIG REWRITE",
+    "params": "-",
+    "summary": "Rewrite the configuration file with the in memory configuration",
+    "group": 9,
+    "since": "2.8.0"
+  },
+  {
+    "name": "CONFIG SET",
+    "params": "parameter value",
+    "summary": "Set a configuration parameter to the given value",
+    "group": 9,
+    "since": "2.0.0"
+  },
+  {
+    "name": "DBSIZE",
+    "params": "-",
+    "summary": "Return the number of keys in the selected database",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DEBUG OBJECT",
+    "params": "key",
+    "summary": "Get debugging information about a key",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DEBUG SEGFAULT",
+    "params": "-",
+    "summary": "Make the server crash",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DECR",
+    "params": "key",
+    "summary": "Decrement the integer value of a key by one",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DECRBY",
+    "params": "key decrement",
+    "summary": "Decrement the integer value of a key by the given number",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DEL",
+    "params": "key [key ...]",
+    "summary": "Delete a key",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "DISCARD",
+    "params": "-",
+    "summary": "Discard all commands issued after MULTI",
+    "group": 7,
+    "since": "2.0.0"
+  },
+  {
+    "name": "DUMP",
+    "params": "key",
+    "summary": "Return a serialized version of the value stored at the specified key.",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "ECHO",
+    "params": "message",
+    "summary": "Echo the given string",
+    "group": 8,
+    "since": "1.0.0"
+  },
+  {
+    "name": "EVAL",
+    "params": "script numkeys key [key ...] arg [arg ...]",
+    "summary": "Execute a Lua script server side",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "EVALSHA",
+    "params": "sha1 numkeys key [key ...] arg [arg ...]",
+    "summary": "Execute a Lua script server side",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "EXEC",
+    "params": "-",
+    "summary": "Execute all commands issued after MULTI",
+    "group": 7,
+    "since": "1.2.0"
+  },
+  {
+    "name": "EXISTS",
+    "params": "key",
+    "summary": "Determine if a key exists",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "EXPIRE",
+    "params": "key seconds",
+    "summary": "Set a key's time to live in seconds",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "EXPIREAT",
+    "params": "key timestamp",
+    "summary": "Set the expiration for a key as a UNIX timestamp",
+    "group": 0,
+    "since": "1.2.0"
+  },
+  {
+    "name": "FLUSHALL",
+    "params": "-",
+    "summary": "Remove all keys from all databases",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "FLUSHDB",
+    "params": "-",
+    "summary": "Remove all keys from the current database",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "GET",
+    "params": "key",
+    "summary": "Get the value of a key",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "GETBIT",
+    "params": "key offset",
+    "summary": "Returns the bit value at offset in the string value stored at key",
+    "group": 1,
+    "since": "2.2.0"
+  },
+  {
+    "name": "GETRANGE",
+    "params": "key start end",
+    "summary": "Get a substring of the string stored at a key",
+    "group": 1,
+    "since": "2.4.0"
+  },
+  {
+    "name": "GETSET",
+    "params": "key value",
+    "summary": "Set the string value of a key and return its old value",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "HDEL",
+    "params": "key field [field ...]",
+    "summary": "Delete one or more hash fields",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HEXISTS",
+    "params": "key field",
+    "summary": "Determine if a hash field exists",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HGET",
+    "params": "key field",
+    "summary": "Get the value of a hash field",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HGETALL",
+    "params": "key",
+    "summary": "Get all the fields and values in a hash",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HINCRBY",
+    "params": "key field increment",
+    "summary": "Increment the integer value of a hash field by the given number",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HINCRBYFLOAT",
+    "params": "key field increment",
+    "summary": "Increment the float value of a hash field by the given amount",
+    "group": 5,
+    "since": "2.6.0"
+  },
+  {
+    "name": "HKEYS",
+    "params": "key",
+    "summary": "Get all the fields in a hash",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HLEN",
+    "params": "key",
+    "summary": "Get the number of fields in a hash",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HMGET",
+    "params": "key field [field ...]",
+    "summary": "Get the values of all the given hash fields",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HMSET",
+    "params": "key field value [field value ...]",
+    "summary": "Set multiple hash fields to multiple values",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HSCAN",
+    "params": "key cursor [MATCH pattern] [COUNT count]",
+    "summary": "Incrementally iterate hash fields and associated values",
+    "group": 5,
+    "since": "2.8.0"
+  },
+  {
+    "name": "HSET",
+    "params": "key field value",
+    "summary": "Set the string value of a hash field",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HSETNX",
+    "params": "key field value",
+    "summary": "Set the value of a hash field,only if the field does not exist",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "HVALS",
+    "params": "key",
+    "summary": "Get all the values in a hash",
+    "group": 5,
+    "since": "2.0.0"
+  },
+  {
+    "name": "INCR",
+    "params": "key",
+    "summary": "Increment the integer value of a key by one",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "INCRBY",
+    "params": "key increment",
+    "summary": "Increment the integer value of a key by the given amount",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "INCRBYFLOAT",
+    "params": "key increment",
+    "summary": "Increment the float value of a key by the given amount",
+    "group": 1,
+    "since": "2.6.0"
+  },
+  {
+    "name": "INFO",
+    "params": "[section]",
+    "summary": "Get information and statistics about the server",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "KEYS",
+    "params": "pattern",
+    "summary": "Find all keys matching the given pattern",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LASTSAVE",
+    "params": "-",
+    "summary": "Get the UNIX time stamp of the last successful save to disk",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LINDEX",
+    "params": "key index",
+    "summary": "Get an element from a list by its index",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LINSERT",
+    "params": "key BEFORE|AFTER pivot value",
+    "summary": "Insert an element before or after another element in a list",
+    "group": 2,
+    "since": "2.2.0"
+  },
+  {
+    "name": "LLEN",
+    "params": "key",
+    "summary": "Get the length of a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LPOP",
+    "params": "key",
+    "summary": "Remove and get the first element in a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LPUSH",
+    "params": "key value [value ...]",
+    "summary": "Prepend one or multiple values to a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LPUSHX",
+    "params": "key value",
+    "summary": "Prepend a value to a list,only if the list exists",
+    "group": 2,
+    "since": "2.2.0"
+  },
+  {
+    "name": "LRANGE",
+    "params": "key start stop",
+    "summary": "Get a range of elements from a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LREM",
+    "params": "key count value",
+    "summary": "Remove elements from a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LSET",
+    "params": "key index value",
+    "summary": "Set the value of an element in a list by its index",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "LTRIM",
+    "params": "key start stop",
+    "summary": "Trim a list to the specified range",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "MGET",
+    "params": "key [key ...]",
+    "summary": "Get the values of all the given keys",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "MIGRATE",
+    "params": "host port key destination-db timeout [COPY] [REPLACE]",
+    "summary": "Atomically transfer a key from a Redis instance to another one.",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "MONITOR",
+    "params": "-",
+    "summary": "Listen for all requests received by the server in real time",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "MOVE",
+    "params": "key db",
+    "summary": "Move a key to another database",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "MSET",
+    "params": "key value [key value ...]",
+    "summary": "Set multiple keys to multiple values",
+    "group": 1,
+    "since": "1.0.1"
+  },
+  {
+    "name": "MSETNX",
+    "params": "key value [key value ...]",
+    "summary": "Set multiple keys to multiple values,only if none of the keys exist",
+    "group": 1,
+    "since": "1.0.1"
+  },
+  {
+    "name": "MULTI",
+    "params": "-",
+    "summary": "Mark the start of a transaction block",
+    "group": 7,
+    "since": "1.2.0"
+  },
+  {
+    "name": "OBJECT",
+    "params": "subcommand [arguments [arguments ...]]",
+    "summary": "Inspect the internals of Redis objects",
+    "group": 0,
+    "since": "2.2.3"
+  },
+  {
+    "name": "PERSIST",
+    "params": "key",
+    "summary": "Remove the expiration from a key",
+    "group": 0,
+    "since": "2.2.0"
+  },
+  {
+    "name": "PEXPIRE",
+    "params": "key milliseconds",
+    "summary": "Set a key's time to live in milliseconds",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "PEXPIREAT",
+    "params": "key milliseconds-timestamp",
+    "summary": "Set the expiration for a key as a UNIX timestamp specified in milliseconds",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "PFADD",
+    "params": "key element [element ...]",
+    "summary": "Adds the specified elements to the specified HyperLogLog.",
+    "group": 11,
+    "since": "2.8.9"
+  },
+  {
+    "name": "PFCOUNT",
+    "params": "key [key ...]",
+    "summary": "Return the approximated cardinality of the set(s) observed by the HyperLogLog at key(s).",
+    "group": 11,
+    "since": "2.8.9"
+  },
+  {
+    "name": "PFMERGE",
+    "params": "destkey sourcekey [sourcekey ...]",
+    "summary": "Merge N different HyperLogLogs into a single one.",
+    "group": 11,
+    "since": "2.8.9"
+  },
+  {
+    "name": "PING",
+    "params": "-",
+    "summary": "Ping the server",
+    "group": 8,
+    "since": "1.0.0"
+  },
+  {
+    "name": "PSETEX",
+    "params": "key milliseconds value",
+    "summary": "Set the value and expiration in milliseconds of a key",
+    "group": 1,
+    "since": "2.6.0"
+  },
+  {
+    "name": "PSUBSCRIBE",
+    "params": "pattern [pattern ...]",
+    "summary": "Listen for messages published to channels matching the given patterns",
+    "group": 6,
+    "since": "2.0.0"
+  },
+  {
+    "name": "PTTL",
+    "params": "key",
+    "summary": "Get the time to live for a key in milliseconds",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "PUBLISH",
+    "params": "channel message",
+    "summary": "Post a message to a channel",
+    "group": 6,
+    "since": "2.0.0"
+  },
+  {
+    "name": "PUBSUB",
+    "params": "subcommand [argument [argument ...]]",
+    "summary": "Inspect the state of the Pub/Sub subsystem",
+    "group": 6,
+    "since": "2.8.0"
+  },
+  {
+    "name": "PUNSUBSCRIBE",
+    "params": "[pattern [pattern ...]]",
+    "summary": "Stop listening for messages posted to channels matching the given patterns",
+    "group": 6,
+    "since": "2.0.0"
+  },
+  {
+    "name": "QUIT",
+    "params": "-",
+    "summary": "Close the connection",
+    "group": 8,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RANDOMKEY",
+    "params": "-",
+    "summary": "Return a random key from the keyspace",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RENAME",
+    "params": "key newkey",
+    "summary": "Rename a key",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RENAMENX",
+    "params": "key newkey",
+    "summary": "Rename a key,only if the new key does not exist",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RESTORE",
+    "params": "key ttl serialized-value",
+    "summary": "Create a key using the provided serialized value,previously obtained using DUMP.",
+    "group": 0,
+    "since": "2.6.0"
+  },
+  {
+    "name": "RPOP",
+    "params": "key",
+    "summary": "Remove and get the last element in a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RPOPLPUSH",
+    "params": "source destination",
+    "summary": "Remove the last element in a list,append it to another list and return it",
+    "group": 2,
+    "since": "1.2.0"
+  },
+  {
+    "name": "RPUSH",
+    "params": "key value [value ...]",
+    "summary": "Append one or multiple values to a list",
+    "group": 2,
+    "since": "1.0.0"
+  },
+  {
+    "name": "RPUSHX",
+    "params": "key value",
+    "summary": "Append a value to a list,only if the list exists",
+    "group": 2,
+    "since": "2.2.0"
+  },
+  {
+    "name": "SADD",
+    "params": "key member [member ...]",
+    "summary": "Add one or more members to a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SAVE",
+    "params": "-",
+    "summary": "Synchronously save the dataset to disk",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SCAN",
+    "params": "cursor [MATCH pattern] [COUNT count]",
+    "summary": "Incrementally iterate the keys space",
+    "group": 0,
+    "since": "2.8.0"
+  },
+  {
+    "name": "SCARD",
+    "params": "key",
+    "summary": "Get the number of members in a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SCRIPT EXISTS",
+    "params": "script [script ...]",
+    "summary": "Check existence of scripts in the script cache.",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "SCRIPT FLUSH",
+    "params": "-",
+    "summary": "Remove all the scripts from the script cache.",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "SCRIPT KILL",
+    "params": "-",
+    "summary": "Kill the script currently in execution.",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "SCRIPT LOAD",
+    "params": "script",
+    "summary": "Load the specified Lua script into the script cache.",
+    "group": 10,
+    "since": "2.6.0"
+  },
+  {
+    "name": "SDIFF",
+    "params": "key [key ...]",
+    "summary": "Subtract multiple sets",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SDIFFSTORE",
+    "params": "destination key [key ...]",
+    "summary": "Subtract multiple sets and store the resulting set in a key",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SELECT",
+    "params": "index",
+    "summary": "Change the selected database for the current connection",
+    "group": 8,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SET",
+    "params": "key value [EX seconds] [PX milliseconds] [NX|XX]",
+    "summary": "Set the string value of a key",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SETBIT",
+    "params": "key offset value",
+    "summary": "Sets or clears the bit at offset in the string value stored at key",
+    "group": 1,
+    "since": "2.2.0"
+  },
+  {
+    "name": "SETEX",
+    "params": "key seconds value",
+    "summary": "Set the value and expiration of a key",
+    "group": 1,
+    "since": "2.0.0"
+  },
+  {
+    "name": "SETNX",
+    "params": "key value",
+    "summary": "Set the value of a key,only if the key does not exist",
+    "group": 1,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SETRANGE",
+    "params": "key offset value",
+    "summary": "Overwrite part of a string at key starting at the specified offset",
+    "group": 1,
+    "since": "2.2.0"
+  },
+  {
+    "name": "SHUTDOWN",
+    "params": "[NOSAVE] [SAVE]",
+    "summary": "Synchronously save the dataset to disk and then shut down the server",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SINTER",
+    "params": "key [key ...]",
+    "summary": "Intersect multiple sets",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SINTERSTORE",
+    "params": "destination key [key ...]",
+    "summary": "Intersect multiple sets and store the resulting set in a key",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SISMEMBER",
+    "params": "key member",
+    "summary": "Determine if a given value is a member of a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SLAVEOF",
+    "params": "host port",
+    "summary": "Make the server a slave of another instance,or promote it as master",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SLOWLOG",
+    "params": "subcommand [argument]",
+    "summary": "Manages the Redis slow queries log",
+    "group": 9,
+    "since": "2.2.12"
+  },
+  {
+    "name": "SMEMBERS",
+    "params": "key",
+    "summary": "Get all the members in a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SMOVE",
+    "params": "source destination member",
+    "summary": "Move a member from one set to another",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SORT",
+    "params": "key [BY pattern] [LIMIT offset count] [GET pattern [GET pattern ...]] [ASC|DESC] [ALPHA] [STORE destination]",
+    "summary": "Sort the elements in a list,set or sorted set",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SPOP",
+    "params": "key",
+    "summary": "Remove and return a random member from a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SRANDMEMBER",
+    "params": "key [count]",
+    "summary": "Get one or multiple random members from a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SREM",
+    "params": "key member [member ...]",
+    "summary": "Remove one or more members from a set",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SSCAN",
+    "params": "key cursor [MATCH pattern] [COUNT count]",
+    "summary": "Incrementally iterate Set elements",
+    "group": 3,
+    "since": "2.8.0"
+  },
+  {
+    "name": "STRLEN",
+    "params": "key",
+    "summary": "Get the length of the value stored in a key",
+    "group": 1,
+    "since": "2.2.0"
+  },
+  {
+    "name": "SUBSCRIBE",
+    "params": "channel [channel ...]",
+    "summary": "Listen for messages published to the given channels",
+    "group": 6,
+    "since": "2.0.0"
+  },
+  {
+    "name": "SUNION",
+    "params": "key [key ...]",
+    "summary": "Add multiple sets",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SUNIONSTORE",
+    "params": "destination key [key ...]",
+    "summary": "Add multiple sets and store the resulting set in a key",
+    "group": 3,
+    "since": "1.0.0"
+  },
+  {
+    "name": "SYNC",
+    "params": "-",
+    "summary": "Internal command used for replication",
+    "group": 9,
+    "since": "1.0.0"
+  },
+  {
+    "name": "TIME",
+    "params": "-",
+    "summary": "Return the current server time",
+    "group": 9,
+    "since": "2.6.0"
+  },
+  {
+    "name": "TTL",
+    "params": "key",
+    "summary": "Get the time to live for a key",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "TYPE",
+    "params": "key",
+    "summary": "Determine the type stored at key",
+    "group": 0,
+    "since": "1.0.0"
+  },
+  {
+    "name": "UNSUBSCRIBE",
+    "params": "[channel [channel ...]]",
+    "summary": "Stop listening for messages posted to the given channels",
+    "group": 6,
+    "since": "2.0.0"
+  },
+  {
+    "name": "UNWATCH",
+    "params": "-",
+    "summary": "Forget about all watched keys",
+    "group": 7,
+    "since": "2.2.0"
+  },
+  {
+    "name": "WATCH",
+    "params": "key [key ...]",
+    "summary": "Watch the given keys to determine execution of the MULTI/EXEC block",
+    "group": 7,
+    "since": "2.2.0"
+  },
+  {
+    "name": "ZADD",
+    "params": "key score member [score member ...]",
+    "summary": "Add one or more members to a sorted set,or update its score if it already exists",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZCARD",
+    "params": "key",
+    "summary": "Get the number of members in a sorted set",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZCOUNT",
+    "params": "key min max",
+    "summary": "Count the members in a sorted set with scores within the given values",
+    "group": 4,
+    "since": "2.0.0"
+  },
+  {
+    "name": "ZINCRBY",
+    "params": "key increment member",
+    "summary": "Increment the score of a member in a sorted set",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZINTERSTORE",
+    "params": "destination numkeys key [key ...] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]",
+    "summary": "Intersect multiple sorted sets and store the resulting sorted set in a new key",
+    "group": 4,
+    "since": "2.0.0"
+  },
+  {
+    "name": "ZLEXCOUNT",
+    "params": "key min max",
+    "summary": "Count the number of members in a sorted set between a given lexicographical range",
+    "group": 4,
+    "since": "2.8.9"
+  },
+  {
+    "name": "ZRANGE",
+    "params": "key start stop [WITHSCORES]",
+    "summary": "Return a range of members in a sorted set,by index",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZRANGEBYLEX",
+    "params": "key min max [LIMIT offset count]",
+    "summary": "Return a range of members in a sorted set,by lexicographical range",
+    "group": 4,
+    "since": "2.8.9"
+  },
+  {
+    "name": "ZRANGEBYSCORE",
+    "params": "key min max [WITHSCORES] [LIMIT offset count]",
+    "summary": "Return a range of members in a sorted set,by score",
+    "group": 4,
+    "since": "1.0.5"
+  },
+  {
+    "name": "ZRANK",
+    "params": "key member",
+    "summary": "Determine the index of a member in a sorted set",
+    "group": 4,
+    "since": "2.0.0"
+  },
+  {
+    "name": "ZREM",
+    "params": "key member [member ...]",
+    "summary": "Remove one or more members from a sorted set",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZREMRANGEBYLEX",
+    "params": "key min max",
+    "summary": "Remove all members in a sorted set between the given lexicographical range",
+    "group": 4,
+    "since": "2.8.9"
+  },
+  {
+    "name": "ZREMRANGEBYRANK",
+    "params": "key start stop",
+    "summary": "Remove all members in a sorted set within the given indexes",
+    "group": 4,
+    "since": "2.0.0"
+  },
+  {
+    "name": "ZREMRANGEBYSCORE",
+    "params": "key min max",
+    "summary": "Remove all members in a sorted set within the given scores",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZREVRANGE",
+    "params": "key start stop [WITHSCORES]",
+    "summary": "Return a range of members in a sorted set,by index,with scores ordered from high to low",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZREVRANGEBYSCORE",
+    "params": "key max min [WITHSCORES] [LIMIT offset count]",
+    "summary": "Return a range of members in a sorted set,by score,with scores ordered from high to low",
+    "group": 4,
+    "since": "2.2.0"
+  },
+  {
+    "name": "ZREVRANK",
+    "params": "key member",
+    "summary": "Determine the index of a member in a sorted set,with scores ordered from high to low",
+    "group": 4,
+    "since": "2.0.0"
+  },
+  {
+    "name": "ZSCAN",
+    "params": "key cursor [MATCH pattern] [COUNT count]",
+    "summary": "Incrementally iterate sorted sets elements and associated scores",
+    "group": 4,
+    "since": "2.8.0"
+  },
+  {
+    "name": "ZSCORE",
+    "params": "key member",
+    "summary": "Get the score associated with the given member in a sorted set",
+    "group": 4,
+    "since": "1.2.0"
+  },
+  {
+    "name": "ZUNIONSTORE",
+    "params": "destination numkeys key [key ...] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]",
+    "summary": "Add multiple sorted sets and store the resulting sorted set in a new key",
+    "group": 4,
+    "since": "2.0.0"
+  }
+]

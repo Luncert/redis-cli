@@ -21,6 +21,14 @@ type config struct {
 }
 
 func main() {
+	fmt.Printf("\r\n  \x1b[1m%s\x1b[0m \x1b[90m%s\x1b[0m\r\n", "help->name", "help->params")
+	fmt.Printf("  \x1b[33msummary:\x1b[0m %s\r\n", "help->summary")
+	fmt.Printf("  \x1b[33msince:\x1b[0m %s\r\n", "help-since")
+	config := initConfig()
+	fmt.Println(config)
+}
+
+func initConfig() *config {
 	config := &config{
 		hostIP:      "127.0.0.1",
 		hostPort:    6379,
@@ -37,11 +45,7 @@ func main() {
 		auth: "",
 		eval: "",
 	}
-	fmt.Println(config)
-}
-
-func usage() {
-
+	return config
 }
 
 func slaveMode() {
