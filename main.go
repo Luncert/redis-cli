@@ -1,12 +1,12 @@
 package main
 
-import "fmt"
-
-const (
-	RedisVersion = "2.9.11"
+import (
+	"bytes"
+	"fmt"
+	"strconv"
 )
 
-type config struct {
+type redisConfig struct {
 	hostIP      string
 	hostPort    int
 	hostSocket  string
@@ -15,25 +15,43 @@ type config struct {
 	dbNum       int
 	interactive int
 	shutdown    int
-	monitorMode bool
-	pubSubModel bool
-	latencyMode bool
 
-	auth string
-	eval string
-	// output int
+	monitorMode              int
+	pubSubModel              int
+	latencyMode              int
+	latencyHistory           int
+	clusterMode              int
+	clusterReissueCommand    int
+	slaveMode                int
+	pipeMode                 int
+	pipeTimeout              int
+	getRdbMode               int
+	statMode                 int
+	scanMode                 int
+	intrinsicLatencyMode     int
+	intrinsicLatencyDuration int
+
+	pattern     string
+	rdbFilename string
+	bigKeys     int
+	stdinArg    int
+	auth        string
+	output      int
+	mbDelim     string
+	eval        string
 }
+
+const (
+	RedisCliDefaultPipeTimeout = 30
+)
 
 func main() {
-	fmt.Printf("\r\n  \x1b[1m%s\x1b[0m \x1b[90m%s\x1b[0m\r\n", "help->name", "help->params")
-	fmt.Printf("  \x1b[33msummary:\x1b[0m %s\r\n", "help->summary")
-	fmt.Printf("  \x1b[33msince:\x1b[0m %s\r\n", "help-since")
 	config := initConfig()
-	fmt.Println(config)
+	initHelp()
 }
 
-func initConfig() *config {
-	config := &config{
+func initConfig() *redisConfig {
+	config := &redisConfig{
 		hostIP:      "127.0.0.1",
 		hostPort:    6379,
 		hostSocket:  "",
@@ -42,24 +60,45 @@ func initConfig() *config {
 		dbNum:       0,
 		interactive: 0,
 		shutdown:    0,
-		monitorMode: false,
-		pubSubModel: false,
-		latencyMode: false,
-		// ...
-		auth: "",
-		eval: "",
+
+		monitorMode:          0,
+		pubSubModel:          0,
+		latencyMode:          0,
+		clusterMode:          0,
+		slaveMode:            0,
+		getRdbMode:           0,
+		pipeMode:             0,
+		pipeTimeout:          RedisCliDefaultPipeTimeout,
+		statMode:             0,
+		scanMode:             0,
+		intrinsicLatencyMode: 0,
+
+		pattern:     "",
+		rdbFilename: "",
+		bigKeys:     0,
+		stdinArg:    0,
+		auth:        "",
+		mbDelim:     "\n",
+		eval:        "",
 	}
+	// TODO: fake tty supports
 	return config
 }
 
-func slaveMode() {
-
-}
-
-func redisGitSHA1() string {
-	return ""
-}
-
-func redisGitDirty() string {
-	return ""
+func cliVersion() string {
+	version := bytes.Buffer{}
+	version.WriteString(GetRedisVersion())
+	if ret, err := strconv.ParseInt(GetRedisSHA1(), 16, 64); err != nil {
+		panic(err)
+	} else if ret != 0 {
+		version.WriteString(
+			fmt.Sprintf("(git:%s", GetRedisSHA1()))
+		if ret, err = strconv.ParseInt(GetRedisGitDirty(), 10, 64); err != nil {
+			panic(err)
+		} else if ret != 0 {
+			version.WriteString("-dirty")
+		}
+		version.WriteRune(')')
+	}
+	return version.String()
 }
