@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"path/filepath"
 )
 
 const (
@@ -45,9 +46,10 @@ type commandHelp struct {
 }
 
 var commandHelps []commandHelp
+var commandHelpFilePath = filepath.Join("data", "command_help.json")
 
 func init() {
-	data, err := ioutil.ReadFile("./command_help.json")
+	data, err := ioutil.ReadFile(commandHelpFilePath)
 	if err != nil {
 		// TODO: use the log library in Redishadow
 		panic(err)
