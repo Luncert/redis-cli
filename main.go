@@ -102,3 +102,7 @@ func cliVersion() string {
 	}
 	return version.String()
 }
+
+//func autoCompletion(buf *bytes.Buffer, lc *lineNoiseCompletions) {
+//
+//}
