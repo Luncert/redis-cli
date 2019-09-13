@@ -1,15 +1,20 @@
 package redis_driver
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+	"net"
+	"time"
+)
 
-type redisContext struct {
-	err    int
-	errStr string
-	fd     int
-	flags  int
-	outBuf string
-	reader *redisReader
+type Error struct {
+	errno int
+	str   string
 }
+
+const (
+	redisBlock = 0x1
+)
 
 type RedisDriver struct {
 	context *redisContext
@@ -17,27 +22,32 @@ type RedisDriver struct {
 }
 
 func (r *RedisDriver) Connect(ip string, port int) {
-	r.initContext()
+	r.context = newRedisContext()
 	r.context.flags |= redisBlock
+
+	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", ip, port))
+	if err != nil {
+		panic(err)
+	}
+
 }
 
-func (r *RedisDriver) initContext() {
-	r.context = &redisContext{
-		err:    0,
-		errStr: "",
+type redisContext struct {
+	err    Error
+	fd     int
+	flags  int
+	outBuf string
+	reader *redisReader
+}
+
+func newRedisContext() *redisContext {
+	return &redisContext{
+		err:    Error{},
 		fd:     0,
 		flags:  0,
 		outBuf: "",
-		reader: nil,
+		reader: newRedisReader(),
 	}
-}
-
-func (r *RedisDriver) Auth(auth string) {
-
-}
-
-func (r *RedisDriver) command(cmd string) {
-
 }
 
 // redis reply types
@@ -63,6 +73,73 @@ type redisReadTask struct {
 	obj         interface{}
 	parent      *redisReadTask
 	privateData interface{}
+}
+
+const (
+	redisReaderMaxBuf = 1024 * 16
+)
+
+type redisReader struct {
+	err Error
+
+	buf              string
+	pos, len, maxBuf int
+
+	rsTask []redisReadTask
+	rIdx   int
+	reply  interface{}
+
+	privateDate interface{}
+}
+
+func newRedisReader() *redisReader {
+	return &redisReader{
+		err:         Error{},
+		buf:         "",
+		pos:         0,
+		len:         0,
+		maxBuf:      redisReaderMaxBuf,
+		rsTask:      nil,
+		rIdx:        -1,
+		reply:       nil,
+		privateDate: nil,
+	}
+}
+
+func (r *redisReader) readBytes(nBytes int) []byte {
+	return nil
+}
+
+func (r *redisReader) readLine(size int) []byte {
+	return nil
+}
+
+func (r *redisReader) moveToNextTask() {
+
+}
+
+func (r *redisReader) processLineItem() int {
+	return 0
+}
+
+func (r *redisReader) processBulkItem() int {
+	return 0
+}
+
+func (r *redisReader) processMultiBulkItem() int {
+	return 0
+}
+
+func (r *redisReader) processItem() int {
+	return 0
+}
+
+func (r *redisReader) feed(buf string) int {
+	return 0
+}
+
+func (r *redisReader) getReply(reply []interface{}) int {
+	return 0
 }
 
 func createReplyObject(typ int) *RedisReply {
@@ -126,4 +203,12 @@ func createNilObject(task *redisReadTask) *RedisReply {
 		parent.elements[task.idx] = r
 	}
 	return r
+}
+
+func redisConnect(ip string, port int) {
+
+}
+
+func redisConnectWithTimeout(ip string, port int, timeout time.Duration) {
+
 }
