@@ -1,6 +1,8 @@
 package redis_driver
 
 import (
+	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"net"
@@ -29,6 +31,44 @@ func (r *RedisDriver) Connect(ip string, port int) {
 	if err != nil {
 		panic(err)
 	}
+
+}
+
+func (r *RedisDriver) Command(format string, args ...string) int {
+	return 0
+}
+
+func (r *RedisDriver) FormatCommand(format string, args []string) (formatted string, err error) {
+	fLen := len(format)
+	if fLen == 1 {
+		if format[0] == '%' {
+			// TODO: throw error
+		} else {
+			formatted = format
+		}
+	} else {
+	}
+	buf := bytes.Buffer{}
+	c := format[i]
+	i := 0
+	for i < fLen {
+		if c != '%' || i == fLen-1 {
+			if c == ' ' {
+
+			} else {
+
+			}
+		} else {
+			switch c {
+			case 's':
+			case 'b':
+			case '%':
+			default:
+
+			}
+		}
+	}
+	return
 
 }
 
