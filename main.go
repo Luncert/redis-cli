@@ -3,102 +3,86 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"github.com/c-bata/go-prompt"
+	"github.com/fatih/color"
+	"os"
 	"strconv"
+	"strings"
 )
 
-type redisConfig struct {
-	hostIP      string
-	hostPort    int
-	hostSocket  string
-	repeat      int
-	interval    int
-	dbNum       int
-	interactive int
-	shutdown    int
-
-	monitorMode              int
-	pubSubModel              int
-	latencyMode              int
-	latencyHistory           int
-	clusterMode              int
-	clusterReissueCommand    int
-	slaveMode                int
-	pipeMode                 int
-	pipeTimeout              int
-	getRdbMode               int
-	statMode                 int
-	scanMode                 int
-	intrinsicLatencyMode     int
-	intrinsicLatencyDuration int
-
-	pattern     string
-	rdbFilename string
-	bigKeys     int
-	stdinArg    int
-	auth        string
-	output      int
-	mbDelim     string
-	eval        string
+var LivePrefixState struct {
+	ServerAddr string
+	DbIdx      int
+	LivePrefix string
 }
 
-const (
-	RedisCliDefaultPipeTimeout = 30
-)
+var commandHelp = NewCommandHelp()
+
+func fatalF(format string, v ...interface{}) {
+	fmt.Printf(format, v...)
+	fmt.Print('\n')
+	os.Exit(1)
+}
 
 func main() {
-	//config := initConfig()
-	//initHelp()
+	LivePrefixState.ServerAddr = "localhost:6379"
+
+	color.Green("redis-cli v%s\n", GetClientVersion())
+
+	p := prompt.New(
+		executor,
+		completer,
+		prompt.OptionTitle("redis-cli"),
+		prompt.OptionPrefix("> "),
+		prompt.OptionLivePrefix(changeLivePrefix),
+		prompt.OptionPrefixTextColor(prompt.DarkGreen),
+		prompt.OptionPreviewSuggestionTextColor(prompt.Blue),
+		prompt.OptionSelectedSuggestionBGColor(prompt.LightGray),
+		prompt.OptionSuggestionBGColor(prompt.DarkBlue),
+	)
+	p.Run()
 }
 
-func initConfig() *redisConfig {
-	config := &redisConfig{
-		hostIP:      "127.0.0.1",
-		hostPort:    6379,
-		hostSocket:  "",
-		repeat:      1,
-		interval:    0,
-		dbNum:       0,
-		interactive: 0,
-		shutdown:    0,
-
-		monitorMode:          0,
-		pubSubModel:          0,
-		latencyMode:          0,
-		clusterMode:          0,
-		slaveMode:            0,
-		getRdbMode:           0,
-		pipeMode:             0,
-		pipeTimeout:          RedisCliDefaultPipeTimeout,
-		statMode:             0,
-		scanMode:             0,
-		intrinsicLatencyMode: 0,
-
-		pattern:     "",
-		rdbFilename: "",
-		bigKeys:     0,
-		stdinArg:    0,
-		auth:        "",
-		mbDelim:     "\n",
-		eval:        "",
+func changeLivePrefix() (string, bool) {
+	buf := bytes.Buffer{}
+	if LivePrefixState.ServerAddr != "" {
+		buf.WriteString(LivePrefixState.ServerAddr)
 	}
-	// TODO: fake tty supports
-	return config
+	if LivePrefixState.DbIdx != 0 {
+		buf.WriteRune('[')
+		buf.WriteString(strconv.FormatInt(int64(LivePrefixState.DbIdx), 10))
+		buf.WriteRune(']')
+	}
+	buf.WriteString("> ")
+	return buf.String(), true
 }
 
-func cliVersion() string {
-	version := bytes.Buffer{}
-	version.WriteString(GetRedisVersion())
-	if ret, err := strconv.ParseInt(GetRedisSHA1(), 16, 64); err != nil {
-		panic(err)
-	} else if ret != 0 {
-		version.WriteString(
-			fmt.Sprintf("(git:%s", GetRedisSHA1()))
-		if ret, err = strconv.ParseInt(GetRedisGitDirty(), 10, 64); err != nil {
-			panic(err)
-		} else if ret != 0 {
-			version.WriteString("-dirty")
+func executor(in string) {
+	in = strings.TrimSpace(in)
+}
+
+func completer(d prompt.Document) (suggests []prompt.Suggest) {
+	line := d.CurrentLine()
+	if line != "" {
+		items := strings.Split(line, " ")
+		if len(items) > 1 {
+			if entry, ok := commandHelp.PreciseSearch(items[0]); ok {
+				paramIdx := len(items) - 2
+				if paramIdx < len(entry.params) {
+					suggests = append(suggests, prompt.Suggest{
+						Text:        entry.params[paramIdx],
+						Description: "",
+					})
+				}
+			}
+		} else if entries, ok := commandHelp.Search(items[0]); ok {
+			for _, entry := range entries {
+				suggests = append(suggests, prompt.Suggest{
+					Text:        entry.name,
+					Description: entry.summary,
+				})
+			}
 		}
-		version.WriteRune(')')
 	}
-	return version.String()
+	return
 }

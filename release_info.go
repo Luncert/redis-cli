@@ -147,3 +147,21 @@ func GetRedisBuildID() uint64 {
 	table := crc64.MakeTable(crc64.ISO)
 	return crc64.Checksum([]byte(buf.String()), table)
 }
+
+func GetClientVersion() string {
+	version := bytes.Buffer{}
+	version.WriteString(GetRedisVersion())
+	if ret, err := strconv.ParseInt(GetRedisSHA1(), 16, 64); err != nil {
+		panic(err)
+	} else if ret != 0 {
+		version.WriteString(
+			fmt.Sprintf("(git:%s", GetRedisSHA1()))
+		if ret, err = strconv.ParseInt(GetRedisGitDirty(), 10, 64); err != nil {
+			panic(err)
+		} else if ret != 0 {
+			version.WriteString("-dirty")
+		}
+		version.WriteRune(')')
+	}
+	return version.String()
+}

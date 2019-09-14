@@ -1,109 +1,36 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"strings"
+	"sort"
 )
 
-const (
-	cliHelpCommand = iota
-	cliHelpGroup
-)
-
-type helpEntry struct {
-	helpType int
-	argc     int
-	argv     []string
-	full     string
-	org      *commandHelp
-}
-
-var helpEntries []helpEntry
-
-// command groups
-const (
-	cgGeneric int = iota
-	cgString
-	cgList
-	cgSet
-	cgSortedSet
-	cgHash
-	cgPubSub
-	cgTransactions
-	cgConnection
-	cgServer
-	cgScripting
-	cgHyperLogLog
-	cgInvalid
-)
-
-var commandGroups = []string{
-	cgGeneric:      "generic",
-	cgString:       "string",
-	cgList:         "list",
-	cgSet:          "set",
-	cgSortedSet:    "sorted_set",
-	cgHash:         "hash",
-	cgPubSub:       "pubsub",
-	cgTransactions: "transactions",
-	cgConnection:   "connection",
-	cgServer:       "server",
-	cgScripting:    "scripting",
-	cgHyperLogLog:  "hyperloglog",
-}
-
-type commandHelp struct {
-	name    string
-	params  string
-	summary string
-	group   int
-	since   string
-}
-
-var commandHelps []commandHelp
 var commandHelpFilePath = filepath.Join("data", "command_help.json")
 
-func initHelp() {
-	initCommandHelps()
-
-	commandsLen := len(commandHelps)
-	groupsLen := cgHyperLogLog - cgGeneric + 1
-
-	for i := 0; i < groupsLen; i++ {
-		argv := []string{fmt.Sprintf("@%s", commandGroups[i])}
-		tmp := helpEntry{
-			helpType: cliHelpGroup,
-			argc:     1,
-			argv:     argv,
-			full:     argv[0],
-			org:      nil,
-		}
-		helpEntries = append(helpEntries, tmp)
-	}
-
-	for i := 0; i < commandsLen; i++ {
-		argv := strings.Split(commandHelps[i].name, " ")
-		tmp := helpEntry{
-			helpType: cliHelpCommand,
-			argc:     len(argv),
-			argv:     argv,
-			full:     commandHelps[i].name,
-			org:      &commandHelps[i],
-		}
-		helpEntries = append(helpEntries, tmp)
-	}
+type CommandHelp struct {
+	root *helpSearchTreeNode
 }
 
-// load command_help.json
-func initCommandHelps() {
+func NewCommandHelp() *CommandHelp {
+	c := &CommandHelp{
+		root: &helpSearchTreeNode{
+			key:   0,
+			refs:  map[uint8]*helpSearchTreeNode{},
+			entry: nil,
+		},
+	}
+	loadCommandHelp(c)
+	return c
+}
+
+func loadCommandHelp(c *CommandHelp) {
 	data, err := ioutil.ReadFile(commandHelpFilePath)
 	if err != nil {
-		// TODO: use the log library in Redishadow
-		panic(err)
+		fatalF("Failed to load command_help.json: %v", err)
 	}
 
 	var cmdHelps []interface{}
@@ -114,103 +41,177 @@ func initCommandHelps() {
 
 	for _, item := range cmdHelps {
 		cmdHelpRaw := item.(map[string]interface{})
-		cmdHelp := commandHelp{
+
+		// build params
+
+		cmdHelp := &CommandHelpEntry{
 			name:    cmdHelpRaw["name"].(string),
-			params:  cmdHelpRaw["params"].(string),
 			summary: cmdHelpRaw["summary"].(string),
-			group:   int(cmdHelpRaw["group"].(float64)),
-			since:   cmdHelpRaw["since"].(string),
+			params:  splitParams(cmdHelpRaw["params"].(string)),
+			//group:   int(cmdHelpRaw["group"].(float64)),
+			//since:   cmdHelpRaw["since"].(string),
 		}
-		commandHelps = append(commandHelps, cmdHelp)
+		if err = c.insert(cmdHelp); err != nil {
+			fatalF("Failed to build helpSearchTree: %v", err)
+		}
 	}
 }
 
-// outputHelp outputs all command help, filtering by group or command name
-func outputHelp(argc int, argv ...string) {
-	if argc == 0 {
-		outputGenericHelp()
-	} else {
-		if argc < 0 {
-			panic(errors.New("invalid argument"))
-		}
-
-		group := cgInvalid
-		if argv[0][0] == '@' {
-			cmdHelpsLen := len(commandHelps)
-			for i := 0; i < cmdHelpsLen; i++ {
-				if stringCaseCompare(argv[1][1:], commandGroups[i]) {
-					group = i
-					break
-				}
+func splitParams(raw string) (params []string) {
+	inBracket := false
+	buf := bytes.Buffer{}
+	for _, r := range raw {
+		switch r {
+		case '[':
+			inBracket = true
+			buf.WriteRune(r)
+		case ']':
+			inBracket = false
+			buf.WriteRune(r)
+		case ' ':
+			if !inBracket {
+				params = append(params, buf.String())
+				buf.Reset()
+			} else {
+				buf.WriteRune(r)
 			}
+		default:
+			buf.WriteRune(r)
 		}
-
-		for i := 0; i < len(helpEntries); i++ {
-			entry := helpEntries[i]
-			if entry.helpType != cliHelpCommand {
-				continue
-			}
-
-			help := entry.org
-			if group == cgInvalid {
-				if argc == entry.argc {
-					j := 0
-					for ; j < argc; j++ {
-						if stringCaseCompare(argv[j], entry.argv[j]) {
-							break
-						}
-					}
-					if j == argc {
-						outputCommandHelp(help, true)
-					}
-				}
-			} else if group == help.group {
-				outputCommandHelp(help, false)
-			}
-		}
-		fmt.Printf("\r\n")
 	}
-}
-
-func stringCaseCompare(s, t string) (equal bool) {
-	if len(s) != len(t) {
-		equal = false
-	} else {
-		equal = true
-		var sr, tr uint8
-		for i := 0; i < len(s); i++ {
-			sr = charToLower(s[i])
-			tr = charToLower(t[i])
-			if sr != tr {
-				equal = false
-				break
-			}
-		}
+	lastParam := buf.String()
+	if len(lastParam) > 0 {
+		params = append(params, lastParam)
 	}
 	return
 }
 
-func charToLower(c uint8) uint8 {
-	if c >= 'a' && c <= 'z' {
-		c -= 32
+func (c *CommandHelp) insert(e *CommandHelpEntry) error {
+	i := 0
+	sz := len(e.name)
+
+	if sz == 0 {
+		return errors.New("invalid CommandHelpEntry, empty key")
 	}
-	return c
+
+	preNode := c.root
+	node := c.root
+	for i < sz {
+		preNode = node
+		node = node.matchChildren(e.name[i])
+		if node != nil {
+			i++
+		} else {
+			for ; i < sz; i++ {
+				node = &helpSearchTreeNode{
+					key:   e.name[i],
+					refs:  map[uint8]*helpSearchTreeNode{},
+					entry: nil,
+				}
+				preNode.refs[node.key] = node
+				preNode = node
+			}
+			preNode.entry = e
+			return nil
+		}
+	}
+
+	if node.entry != nil {
+		return errors.New("invalid CommandHelpEntry, key existed")
+	} else {
+		node.entry = e
+	}
+	return nil
 }
 
-func outputCommandHelp(help *commandHelp, printGroup bool) {
-	fmt.Printf("\r\n  \x1b[1m%s\x1b[0m \x1b[90m%s\x1b[0m\r\n", help.name, help.params)
-	fmt.Printf("  \x1b[33msummary:\x1b[0m %s\r\n", help.summary)
-	fmt.Printf("  \x1b[33msince:\x1b[0m %s\r\n", help.since)
-	if printGroup {
-		fmt.Printf("  \x1b[33mgroup:\x1b[0m %s\r\n", commandGroups[help.group])
+func (c *CommandHelp) PreciseSearch(key string) (*CommandHelpEntry, bool) {
+	node := c.searchNode(key)
+	if node == nil || node.entry == nil {
+		return nil, false
 	}
+	return node.entry, true
 }
 
-func outputGenericHelp() {
-	version := cliVersion()
-	fmt.Printf("redis-cli %s\r\n"+
-		"Type: \"help @<group>\" to get a list of commands in <group>\r\n"+
-		"      \"help <command>\" for help on <command>\r\n"+
-		"      \"help <tab>\" to get a list of possible help topics\r\n"+
-		"      \"quit\" to exit\r\n", version)
+func (c *CommandHelp) Search(key string) ([]*CommandHelpEntry, bool) {
+	node := c.searchNode(key)
+	if node == nil {
+		return nil, false
+	}
+	entries := node.getDescendants()
+	if node.entry != nil {
+		entries = append(node.getDescendants(), node.entry)
+	}
+	// sort
+	sort.Sort(CommandHelpEntries(entries))
+	return entries, true
+}
+
+func (c *CommandHelp) searchNode(key string) *helpSearchTreeNode {
+	node := c.root
+	for _, r := range key {
+		// to lower
+		if r >= 97 && r <= 122 {
+			r -= 32
+		}
+		if node = node.matchChildren(uint8(r)); node == nil {
+			return nil
+		}
+	}
+	return node
+}
+
+type CommandHelpEntry struct {
+	name    string
+	summary string
+	params  []string
+}
+
+func (c *CommandHelpEntry) marshall() (ret int64) {
+	for i, r := range c.name {
+		ret = ret + (int64(r) << uint(i))
+	}
+	return
+}
+
+type CommandHelpEntries []*CommandHelpEntry
+
+func (c CommandHelpEntries) Len() int {
+	return len(c)
+}
+
+func (c CommandHelpEntries) Less(i, j int) bool {
+	return c[i].marshall() < c[j].marshall()
+}
+
+func (c CommandHelpEntries) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
+type helpSearchTreeNode struct {
+	key   uint8
+	refs  map[uint8]*helpSearchTreeNode
+	entry *CommandHelpEntry
+}
+
+func (h *helpSearchTreeNode) match(key uint8) bool {
+	return h.key == key
+}
+
+func (h *helpSearchTreeNode) matchChildren(key uint8) *helpSearchTreeNode {
+	for _, ref := range h.refs {
+		if ref.match(key) {
+			return ref
+		}
+	}
+	return nil
+}
+
+func (h *helpSearchTreeNode) getDescendants() (entries []*CommandHelpEntry) {
+	for _, node := range h.refs {
+		if node.entry != nil {
+			entries = append(entries, node.entry)
+		}
+		entries = append(entries, node.getDescendants()...)
+	}
+	return
 }
