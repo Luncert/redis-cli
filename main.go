@@ -46,8 +46,8 @@ const (
 )
 
 func main() {
-	config := initConfig()
-	initHelp()
+	//config := initConfig()
+	//initHelp()
 }
 
 func initConfig() *redisConfig {
@@ -102,7 +102,3 @@ func cliVersion() string {
 	}
 	return version.String()
 }
-
-//func autoCompletion(buf *bytes.Buffer, lc *lineNoiseCompletions) {
-//
-//}
